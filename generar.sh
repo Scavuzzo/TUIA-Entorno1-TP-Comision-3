@@ -21,25 +21,36 @@ mkdir -p "$DIRECTORIOSALIDA"
 
 
 
-nombres_aleatorios=($(shuf -e "${NOMBRE[@]}")) #shuf me mezcla la lista de nombres y despues iteramos con el for, pero con la lista ya mezclada :) . El uso de -e garantiza que cuando le pasamos todos los elementos a la lista como argumento a shuf , va a interpretarlos como elementos por separado
+NOMBRES_ALEATORIOS=($(shuf -e "${NOMBRE[@]}")) #shuf me mezcla la lista de nombres y despues iteramos con el for, pero con la lista ya mezclada :) . El uso de -e garantiza que cuando le pasamos todos los elementos a la lista como argumento a shuf , va a interpretarlos como elementos por separado
 
 
 # Bucle for para generar img
 for ((i=0; i<IMAGENES; i++)) #este bucle for se ejecuta IMAGENES veces , lo arrancamos en 0 y aumenta 1 por cada iteracion hasta i-1
 do
 
-  nombre_archivo="${nombres_aleatorios[$i]}_$i.jpg"  
+  NOMBRE_ARCHIVO="${NOMBRES_ALEATORIOS[$i]}_$i.jpg"  
 
-
-  # Descargar imagen desde el servicio web
-  curl -o "$DIRECTORIOSALIDA/$nombre_archivo" "https://source.unsplash.com/random/900%C3%97700/?person."  #el curl , por defecto descarga y guarda las img en "imagenes", con el -o podemos especificarle una ruta
+ # Descargar imagen desde el servicio web
+  curl -o "$DIRECTORIOSALIDA/$NOMBRE_ARCHIVO" -L "https://source.unsplash.com/random/900%C3%97700/?person."  #el curl , por defecto descarga y guarda las img en "imagenes", con el -o podemos especificarle una ruta
   
   # Esperar 5 segundo entre descargas
-  sleep 5
+  sleep 2
+  #con awk elegimos la primer columna, si no nos muestra la ruta del archivo (puede estar o no)
+  SUMA_VERIFICACION=$(md5sum "$DIRECTORIOSALIDA/$NOMBRE_ARCHIVO") # | awk '{ print $1 }')
+
+  # SUMA de verificacion en un archivo de texto
+  echo "$SUMA_VERIFICACION  $NOMBRE_ARCHIVO" >> "$DIRECTORIOSALIDA/sumas_verificacion.txt" 
+
+
+
 done
 
 
-# Comprimir imágenes
-#tar -czf imagenes.tar.gz "$DIRECTORIOSALIDA"
-#tar -czf "$DIRECTORIOSALIDA/imagenes.tar.gz" -C "$DIRECTORIOSALIDA" .
+#comprimir las imagenes
+COMPRIMIR="$DIRECTORIOSALIDA"/imagenes.zip
+zip  "$COMPRIMIR" "$DIRECTORIOSALIDA"/*.jpg
+
+
+
+echo "Las imágenes fueron comprimidas con exito"
 
