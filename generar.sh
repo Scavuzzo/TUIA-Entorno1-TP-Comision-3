@@ -1,34 +1,39 @@
 #!/bin/bash
 
-# Nombres. Podria extenderse indefinidamente
+echo "Ingrese la cantidad de imagenes que desea descargar: "
+read -r IMAGENES
 
-NOMBRE=("Lorenzo" "Lautaro" "Alejandro" "Juan" "Facundo" "Jorge" "Juliana" "Maria" "Lucia" "Ana")
+# Validamos si el valor ingresado por el usuario es un nùmero entero positivo
 
-#Este es el primer argumento que le tenemos que dar al tp.sh y determina el numero de imagenes que queremos generar. Ej:tp.sh 10 (va a generar 10 img) 
-IMAGENES=$1
+if echo "$IMAGENES" | grep -qP '^[1-9][0-9]*$'; then  #priemr digito rango del 1-9, luego cualquier numero entre 0 y 9
+  echo "Número válido de imagenes"
+else
+  echo "Debe ingresar un nùmero entero positivo"
+  exit 1
+fi
+#Solicitamos el ingreso del nombre de la carpeta destino
 
-# Directorio de salida. Aqui tengo mi segundo argumento, es basicamente el nombre de la carpeta en donde quiero que se almecenen las imagenes
-DIRECTORIOSALIDA=$2
+echo "Ingrese el nombre de la carpeta donde desea guardar las imágenes"
+read -r DIRECTORIOSALIDA
 
-# Verificar si el número de imágenes se ha proporcionado
-if [ -z "$IMAGENES" ] || [ -z "$DIRECTORIOSALIDA" ]; then #con -z verificamos si la variable esta vacia o no. Si se cumple que la variable esta vacia , es decir, es True. Se sigue ejecutando el codigo
-  echo "Debe proporcionar la cantidad de imágenes a generar." #Mensaje de error. RECORDAR: || es el operador or. Se cumple esto o esto 
-  exit 1 #indico el error
+#validamos el ingreso
+if [[ -z  "$DIRECTORIOSALIDA" ]]; then
+  echo "Error - Debe proporcionar un nombre"
+  exit 1
 fi
 
 # Creamos el directorio salida , el -p nos crea los directorios padres si no existen
 mkdir -p "$DIRECTORIOSALIDA"
 
-
-
-NOMBRES_ALEATORIOS=($(shuf -e "${NOMBRE[@]}")) #shuf me mezcla la lista de nombres y despues iteramos con el for, pero con la lista ya mezclada :) . El uso de -e garantiza que cuando le pasamos todos los elementos a la lista como argumento a shuf , va a interpretarlos como elementos por separado
+NOMBRES_ALEATORIOS=($(curl -s https://raw.githubusercontent.com/adalessandro/EdP-2023-TP-Final/main/dict.csv | grep -oE '[[:alpha:]]+')) #filtro de nombres 
 
 
 # Bucle for para generar img
 for ((i=0; i<IMAGENES; i++)) #este bucle for se ejecuta IMAGENES veces , lo arrancamos en 0 y aumenta 1 por cada iteracion hasta i-1
 do
+  INDICE_ALEATORIO=$((RANDOM % ${#NOMBRES_ALEATORIOS[@]}))
 
-  NOMBRE_ARCHIVO="${NOMBRES_ALEATORIOS[$i]}_$i.jpg"  
+  NOMBRE_ARCHIVO="${NOMBRES_ALEATORIOS[$INDICE_ALEATORIO]}_$i.jpg"  
 
  # Descargar imagen desde el servicio web
   curl -o "$DIRECTORIOSALIDA/$NOMBRE_ARCHIVO" -L "https://source.unsplash.com/random/900%C3%97700/?person."  #el curl , por defecto descarga y guarda las img en "imagenes", con el -o podemos especificarle una ruta
@@ -41,16 +46,11 @@ do
   # SUMA de verificacion en un archivo de texto
   echo "$SUMA_VERIFICACION  $NOMBRE_ARCHIVO" >> "$DIRECTORIOSALIDA/sumas_verificacion.txt" 
 
-
-
 done
-
 
 #comprimir las imagenes
 COMPRIMIR="$DIRECTORIOSALIDA"/imagenes.zip
 zip  "$COMPRIMIR" "$DIRECTORIOSALIDA"/*.jpg
-
-
 
 echo "Las imágenes fueron comprimidas con exito"
 
