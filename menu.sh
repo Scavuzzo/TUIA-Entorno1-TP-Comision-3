@@ -12,49 +12,32 @@ descargar() {
     #  scrip descargar.sh
 }
 
-#$OPCION=""
+OPCIONES=("SALIR" "DescargarImágenes" "ComprimirImágenes") 
 
-while [[ $OPCION != "3" ]];
+PS3='Ingrese un numero> '
+echo "Que desea hacer?"
+select opcion in "SALIR" "Descargar Imágenes" "Comprimir Imágenes"
 do
-	echo
-	echo -e "¡Bienvenido!: seleccione alguna de las opciones: (presione q para salir)\n"
-
-	echo "1. Descargar imágenes"
-	echo "2. Generar imágenes"
-	echo "3. Salir del programa"
-	echo 
-
-	read -p "Opción: " OPCION
-
-	echo 
-
-	case $OPCION in
-	    1)
-			descargar
-			exit 0
-	        ;;
-	    2)
-			generar
-			exit 0
-	        ;;
-	    3)
-			echo "Saliendo del programa..."
-			exit 0
-			;;
-	    *)
-			echo
-	        echo "XxxxxxxERRORxxxxxxX"
-			echo "No ha seleccionado una opción correcta, pruebe nuevamente..."
-			echo "XxxxxxxERRORxxxxxxX"
-			echo
-	        ;;
-	esac
-
-	echo
+	[ -e "$opcion" ] && echo "Opcion elegida: $opcion" && continue 
+	[ $REPLY == 1 ] && echo "Hasta luego" && break 
+	echo "Opcion elegida: $opcion" && break
 done
 
-#echo "La opción elegida es: $OPCION"
-#echo
-#echo "Cantidad de argumentos pasados: $#"
-#echo
+case $REPLY in
+	1)
+		exit 0
+        	;;
+   	2)
+		descargar
+		exit 0
+	 	;;
+	3)
+		generar
+		exit 0
+		;;
+
+esac
+
+
+
 exit 0
