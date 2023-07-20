@@ -6,25 +6,25 @@
 # cualquier combinación de palabras que empiecen con un letra mayúscula y sigan por minúsculas.
 
 # Creacion de las variables
-CARPETA_ORIGEN="/home/alsop-agustin/Desktop/descomprimidos"
-CARPETA_DESTINO="/home/alsop-agustin/Desktop/procesados"
-EXPRESION="^[A-Z][a-z]+[ ][A-Z][a-z]+"
+RUTA_UBICACION=$(pwd)
+CARPETA_ORIGEN="${RUTA_UBICACION}/descomprimidos"
+CARPETA_DESTINO="${RUTA_UBICACION}/procesados"
+REGEXP="^[A-Z][a-z]+[ ]?[A-Z]?[a-z][ ]?[A-Z]?[a-z]"
+#REGEXP="^[A-Z][a-z]+[ ][A-Z][a-z]+"
 
 # Validacion de existencia de imagenes en la carpeta
-cd $CARPETA_ORIGEN
-LISTA_ARCHIVOS=$(find . -name "*.jpeg")
-cd ..
 
+cd $CARPETA_ORIGEN
+LISTA_ARCHIVOS=$(find . -name "*.jpg")
+cd ..
 [ -z "$LISTA_ARCHIVOS" ] && echo "No se encontraron fotos en el directorio" && exit 1
 
 # Proceso de modificacion de las imagenes
+
 for IMAGEN in "$CARPETA_ORIGEN"/*
 do
-        if [[ $IMAGEN == *.jpg || $IMAGEN == *.png || $IMAGEN == *.jpeg ]]
-        then
-                NOMBRE=$(basename "$IMAGEN")
-                [[ $NOMBRE =~ $EXPRESION ]] && convert "$IMAGEN" -resize 512x512 "$CARPETA_DESTINO/$NOMBRE"
-        fi
+	NOMBRE=$(basename "$IMAGEN")
+        [[ $NOMBRE =~ $REGEXP ]] && convert "$IMAGEN" -resize 512x512 "$CARPETA_DESTINO/$NOMBRE"
 done
-#CHEQUEAR VALIDACIONES
+
 exit 0
