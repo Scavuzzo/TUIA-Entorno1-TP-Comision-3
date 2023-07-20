@@ -1,48 +1,66 @@
 #!/bin/bash
 
+#RUtas, directorios o archivos
 RUTA_UBICACION=$(pwd) 
 DIRECT_PROCESADOS="$RUTA_UBICACION/procesados"
-echo $DIRECT_PROCESADOS
+DIRECT_COMPRIMIDOS="$RUTA_UBICACION/comprimidos"
+DIRECT_OUTPUT="$RUTA_UBICACION/output"
 AUX_TXT="aux.txt"
+VALIDOS_TXT="$DIRECT_COMPRIMIDOS/lista_nombres_validos.txt"
+VALIDOS_A_TXT="$DIRECT_COMPRIMIDOS/lista_nombres_a.txt"
 
-REGEXP_VALIDOS="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*"
+#Expresiones Regulares
+REGEXP_VALIDOS="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*" 
+#REGEXP_VALIDOS="^[A-Za-z]+( [A-Za-z]+)*$"
 REGEXP_VALIDOS_A="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*[a]{1}"
 
-[ -e "lista_nombres_validos.txt" ] && rm -r lista_nombres_validos.txt
-[ -e "lista_nombres_a.txt" ] && rm -r lista_nombres_a.txt
-[ -e $AUX_TXT ] && rm -r $AUX_TXT
+#Validacion de archivos utilizados
+[ -e $AUX_TXT ] && rm $AUX_TXT
+[ -e $DIRECT_COMPRIMIDOS ] && rm -r $DIRECT_COMPRIMIDOS
+[ -e $DIRECT_OUTPUT ] && rm -r $DIRECT_OUTPUT
+
+mkdir $DIRECT_COMPRIMIDOS
 
 #Validamos que la ruta sea un directorio
 if [ -d "$DIRECT_PROCESADOS" ] 
 then	
 	# Buscamos las imágenes dentro de la carpeta y luego volvemos a la raíz del programa
-	find $DIRECT_PROCESADOS -name "*.jpeg" >> "$AUX_TXT" 
-	echo "Buscando imágenes..."
+	echo -e "Buscando imágenes... \n"
 	sleep 2
-	#  Validamos que haya fotos en el directorio 
-	if [ -s "$AUX_TXT" ]
+	cp -r "$DIRECT_PROCESADOS"/*.jpeg "$DIRECT_COMPRIMIDOS"
+	if [ "$(ls -A "$DIRECT_COMPRIMIDOS")" ]
 	then
-	  	while IFS= read -r linea; do
+		find $DIRECT_COMPRIMIDOS -name "*.jpeg" >> "$AUX_TXT"
+		CONTADOR_A=0
+	  	while IFS= read -r LINEA; do
     			# asfasfa
-			NOMBRE_FOTO="${linea##*/}"
-			NOMBRE_FOTO="${linea%.jpeg}"
-			echo "$NOMBRE_FOTO" >> lista_nombres_validos.txt
+			NOMBRE_FOTO=$(echo "$LINEA" | grep -oP '[^/]+(?=\.jpeg)')
+			if [[ "$NOMBRE_FOTO" =~ $REGEXP_VALIDOS ]]
+                       	then
+				echo "$NOMBRE_FOTO" >> $VALIDOS_TXT
+			fi
+                       	if [[ "$NOMBRE_FOTO" =~ $REGEXP_VALIDOS_A ]]
+                       	then
+                       		echo "$NOMBRE_FOTO" >> $VALIDOS_A_TXT
+				((CONTADOR_A++))
+                       	fi
   		done < "$AUX_TXT"
-#		for FOTO in $RUTA_PROCESADOS\*
-#		do
-#			echo $(basename "$FOTO")
-#			if [[ $FOTO_NOMBRE =~ $REGEXP_VALIDOS ]]
-#			then
-#			echo "${FOTO_NOMBRE%.*}" >> ../lista_nombres_validos.txt
-#			fi
-#			if [[ $FOTO_NOMBRE =~ $REGEXP_VALIDOS_A ]]
-#			then
-#			echo "${FOTO_NOMBRE%.*}" >> lista_nombres_a.txt
-#			fi
-#		done
+		echo -e "Imágenes procesadas correctamente. \n"
+		sleep 1
+		echo -e "Cantidad de nombres que terminan en a: $CONTADOR_A \n"
+		echo -e "Cantidad de nombres que terminan en a: $CONTADOR_A \n" | cat - $VALIDOS_A_TXT > $AUX_TXT
+		mv $AUX_TXT $VALIDOS_A_TXT
 	else
-		echo "No se encontraron fotos en el directorio" && exit 1
+		echo "No se existen imágenes procesadas. Vuelva al paso anterior." && exit 1
 	fi
+	# Si el proceso se lleva a cabo correctamente, comprimimos los archivos y directorios
+	echo -e "Compresión en curso... \n"
+	echo $(ls -a)
+	mkdir $DIRECT_OUTPUT
+	cd $DIRECT_COMPRIMIDOS
+	zip -r $DIRECT_OUTPUT ./
+#	zip -r "$RUTA_UBICACION/imagenes.zip ./"
+	echo "Proceso terminado, resultado disponible en carpeta output"
 fi
 
 
