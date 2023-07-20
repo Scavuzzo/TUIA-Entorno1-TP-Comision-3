@@ -26,5 +26,5 @@ do
                 [[ $NOMBRE =~ $EXPRESION ]] && convert "$IMAGEN" -resize 512x512 "$CARPETA_DESTINO/$NOMBRE"
         fi
 done
-
+#CHEQUEAR VALIDACIONES
 exit 0
