@@ -1,36 +1,28 @@
 #!/bin/bash
 
-echo "Ingrese el nombre del directorio en donde tiene almacenadas las imágenes:"
-read -r DIRECTORIO
+# Rutas, archivos y directorios
+RUTA_UBICACION=$(pwd)
+DIRECT_IMAGENES="${RUTA_UBICACION}/imagenes_generadas"
+RUTA_DESCOMPRIMIDOS="${RUTA_UBICACION}/descomprimidos"
 
-echo "Ingrese el nombre del archivo a descomprimir:"
-read -r DESCOMPRIMIR
+echo "Ingrese el nombre del comprimido: "
+read -r ARCHIVO_COMPRIMIDO
 
-echo "Ingrese el nombre de la suma de verificacion"
-read -r SUMVERIFICACION
+[ ! -e "${DIRECT_IMAGENES}/${ARCHIVO_COMPRIMIDO}.zip" ] && echo "El archivo no se ha encontrado" && exit 1
+RUTA_COMPRIMIDO="${DIRECT_IMAGENES}/${ARCHIVO_COMPRIMIDO}.zip"
 
-SUMVERIFICACION="../sumas_verificacion.txt"
+echo "Ingrese la suma de verificacion: "
+read -r SUMA_VERIFICACION
 
-cd "$DIRECTORIO" 
+[ ! -e "${DIRECT_IMAGENES}/${SUMA_VERIFICACION}.txt" ] && echo "El archivo de suma de verificiación no se ha encontrado" && exit 1
+RUTA_SUMA="${DIRECT_IMAGENES}/${SUMA_VERIFICACION}.txt"
 
-# Descomprimir el archivo comprimido
-unzip "$DESCOMPRIMIR" 
+SUMA_COMPRIMIDO=$(md5sum $RUTA_COMPRIMIDO)
+SUMA_CHECK=$(head -n 1 $RUTA_SUMA)
 
-cd "$DIRECTORIO"
+[ "$SUMA_COMPRIMIDO" != "$SUMA_CHECK" ] && echo "Error: El archivo $ARCHIVO_COMPRIMIDO ha sido modificado o la suma de verificación es erronea" && exit 1
 
-# Generar las sumas de verificación
-for archivo in *.jpg; do
-  suma_verificacion=$(md5sum "$archivo" | grep -o '^[^ ]*')
-  echo "$suma_verificacion" >> "$sumverificacion_actual.txt"
-done
+cd $DIRECT_IMAGENES
+unzip -d $RUTA_DESCOMPRIMIDOS "${ARCHIVO_COMPRIMIDO}.zip"
+cd ..
 
-# Ordenar las sumas de verificación
-sort -o "$SUMAVERIFICACION_ACTUAL" "$SUMAVERIFICACION_ACTUAL"
-sort -o "$SUMAVERIFICACION_ANTERIOR" "$SUMAVERIFICACION_ANTERIOR"
-
-# Comparar las sumas de verificación
-if cmp -s "$SUMAVERIFICACION_ACTUAL" "$SUMAVERIFICACION_ANTERIOR"; then
-  echo "La suma de verificación no ha cambiado."
-else
-  echo "La suma de verificación ha cambiado."
-fi
