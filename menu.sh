@@ -1,47 +1,43 @@
 #!/bin/bash
 
-#$OPCION=""
+# Opciones del menu- Posteriormente AGREGAMOS el archivo generar.sh
+generar() {
+    echo "Has elegido Generar las imagenes"
+    # aca agregamos el scrip generar.sh
+}
 
-while [[ $OPCION != "q" ]];
+# Funcion para DESCARGAR
+descargar() {
+    echo "Has elegido Descargar las imagenes"
+    #  scrip descargar.sh
+}
+
+OPCIONES=("SALIR" "DescargarImágenes" "ComprimirImágenes") 
+
+PS3='Ingrese un numero> '
+echo "Que desea hacer?"
+select opcion in "SALIR" "Descargar Imágenes" "Comprimir Imágenes"
 do
-	echo
-	echo -e "¡Bienvenido!: seleccione alguna de las opciones: (presione q para salir)\n"
-
-	echo "1. Descargar imágenes"
-	echo "2. Generar imágenes"
-
-	echo 
-
-	read -p "Opción: " OPCION
-
-	echo 
-
-	case $OPCION in
-	    1)
-		echo "Ha seleccionado 'Descargar Imágenes'"
-		exit 0
-	        ;;
-	    2)
-	        echo "Ha seleccionado 'Generar Imágenes'"
-		exit 0
-	        ;;
-	    q)
-		echo "Saliendo del programa..."
-		;;
-	    *)
-		echo
-	        echo "XxxxxxxERRORxxxxxxX"
-		echo "No ha seleccionado una opción correcta, pruebe nuevamente..."
-		echo "XxxxxxxERRORxxxxxxX"
-		echo
-	        ;;
-	esac
-
-	echo
+	[ -e "$opcion" ] && echo "Opcion elegida: $opcion" && continue 
+	[ $REPLY == 1 ] && echo "Hasta luego" && break 
+	echo "Opcion elegida: $opcion" && break
 done
 
-#echo "La opción elegida es: $OPCION"
-#echo
-#echo "Cantidad de argumentos pasados: $#"
-#echo
+case $REPLY in
+	1)
+		exit 0
+        	;;
+   	2)
+		descargar
+		exit 0
+	 	;;
+	3)
+		generar
+		exit 0
+		;;
+
+esac
+
+
+
 exit 0
