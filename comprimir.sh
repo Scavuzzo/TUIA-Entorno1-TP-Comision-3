@@ -29,11 +29,11 @@ mkdir $DIRECT_COMPRIMIDOS
 if [ -d "$DIRECT_PROCESADOS" ]
 then
 	# Buscamos las imágenes dentro de la carpeta y luego volvemos a la raíz del programa
-	echo "Buscando imágenes..."
-	cargando
-	cp -r "$DIRECT_PROCESADOS"/*.jpg "$DIRECT_COMPRIMIDOS"
+	echo -e "Buscando imágenes...\n" && sleep 1
+	[ "$(ls -A "$DIRECT_PROCESADOS")" ] && cp -r "$DIRECT_PROCESADOS"/*.jpg "$DIRECT_COMPRIMIDOS"
 	if [ "$(ls -A "$DIRECT_COMPRIMIDOS")" ]
 	then
+		cargando
 		find $DIRECT_COMPRIMIDOS -name "*.jpg" >> "$AUX_TXT"
 		CONTADOR_A=0
 	  	while IFS= read -r LINEA; do
@@ -54,7 +54,7 @@ then
 		echo -e "Cantidad de nombres que terminan en a: $CONTADOR_A \n" | cat - $VALIDOS_A_TXT > $AUX_TXT
 		mv $AUX_TXT $VALIDOS_A_TXT
 	else
-		echo "No se existen imágenes procesadas. Ejecute Procesar antes de Comprimir." && ./menu.sh
+		echo "No se existen imágenes procesadas. Ejecute pasos 1, 2 y 3 antes de Comprimir." && exit 1
 	fi
 	# Si el proceso se lleva a cabo correctamente, comprimimos los archivos y directorios
 	echo -e "Compresión en curso... \n" && sleep 1
