@@ -8,7 +8,7 @@ NOMBRES_TXT="nombres.txt"
 #Expresiones regulares
 REGEXP_NOMBRE="^[A-Za-z ]+"
 REGEXP_NUMERO="^[1-9][0-9]*$"
-<<<<<<< HEAD
+
 echo "Bienvenido"
 echo "----------------------------------------------------------------------------------------------------"
 sleep 1
@@ -24,18 +24,6 @@ else
 	sleep 1
 	echo "Serás redireccionado al menú"
 	sleep 2
-=======
-
-echo "Ingrese la cantidad de imagenes que desea descargar: "
-read -r CANTIDAD_IMAGENES
-
-# Validamos si el valor ingresado por el usuario es un nùmero entero positivo
-if [[ "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]]
-then
-	echo "Número válido de imagenes"
-else
-	echo "Debe ingresar un nùmero entero positivo"
->>>>>>> Alsop/procesar.sh
 	exit 1
 fi
 
@@ -60,14 +48,6 @@ do
  	 # Esperar 2 segundos entre descargas
   	sleep 2
 
-<<<<<<< HEAD
-=======
-  	# suma de verificación
-#  	SUMA_VERIFICACION=$(md5sum "$DIRECT_SALIDA/$NOMBRE_ARCHIVO")
-
-  	# SUMA de verificacion en un archivo de texto
-#  	echo "$SUMA_VERIFICACION" >> "${DIRECT_SALIDA}/${ARCHIVO_COMPRIMIDO}.txt"
->>>>>>> Alsop/procesar.sh
 done
 
 rm $NOMBRES_TXT
@@ -77,11 +57,8 @@ COMPRIMIR="${DIRECT_SALIDA}/${ARCHIVO_COMPRIMIDO}.zip"
 echo $COMPRIMIR
 
 cd $DIRECT_SALIDA
-<<<<<<< HEAD
 echo "Comprimiento..."
 sleep 1
-=======
->>>>>>> Alsop/procesar.sh
 zip "${ARCHIVO_COMPRIMIDO}.zip" ./*.jpg
 cd ..
 

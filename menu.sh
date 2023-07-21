@@ -77,13 +77,12 @@ comprimir() {
 OPCIONES=("Generar Imagenes" "Descomprimir imagenes" "Procesar imagenes" "Comprimir" "Salir")
 
 <<<<<<< HEAD
-
-echo "Bienvenido al programa"
-sleep 1
-echo "El mismo fue desarrollado por Alsop Agustin, Scavuzzo Lautaro y Peralta Alejandro"
+echo " "
+echo " "
+echo "-----------------------------------------------------------------------------------------------------------"
+echo "Hola de nuevo!, seras redireccionado al menu"
 sleep 2
 echo "Recomendamos leer el archivo readme.md antes de comenzar a utilizar el siguiente programa"
-sleep 2
 echo "---------------------------------------------------------------------------------------------------------"
 sleep 1
 echo "Seleccione una opcion del siguiente menu: "
