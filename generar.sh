@@ -2,39 +2,47 @@
 
 #Rutas, archivos y directorios
 RUTA_UBICACION=$(pwd)
-DIRECT_SALIDA="$RUTA_UBICACION/imagenes_generadas"
+DIRECT_GENERADOS="$RUTA_UBICACION/generados"
 NOMBRES_TXT="nombres.txt"
 
 #Expresiones regulares
 REGEXP_NOMBRE="^[A-Za-z ]+"
 REGEXP_NUMERO="^[1-9][0-9]*$"
 
-echo "Bienvenido"
-echo "----------------------------------------------------------------------------------------------------"
-sleep 1
-echo "Ingrese la cantidad de imagenes que desea descargar: "
-read -r CANTIDAD_IMAGENES
-
 # Validamos si el valor ingresado por el usuario es un número entero positivo
-if [[ "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]]
-then
-	echo "El número ingresado es válido"
-else
-	echo "Debe ingresar un número entero positivo"
-	sleep 1
-	echo "Serás redireccionado al menú"
-	sleep 2
-	exit 1
-fi
+while [[ ! "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]]
+do
+    echo "Ingrese la cantidad de imágenes que desea descargar: "
+    read -r CANTIDAD_IMAGENES
+
+    # Validamos si el valor ingresado por el usuario es un número entero positivo
+    if [[ ! "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]]; then
+        echo -e "\n --- \nError: Debe ingresar un número entero positivo.\n --- \n"
+    fi
+done
 
 # Creamos el directorio salida
-mkdir -p $DIRECT_SALIDA   #-p , si ya existe, no lo crea
-echo "Ingrese el nombre del archivo comprimido"
-read -r ARCHIVO_COMPRIMIDO
+mkdir -p $DIRECT_GENERADOS   #-p , si ya existe, no lo crea
+
+# Preguntamos por el nombre del archivo y validamos que no exista
+while true; do
+    echo -e "\nIngrese el nombre del archivo final comprimido (sin la extensión .zip):"
+    read -r ARCHIVO_COMPRIMIDO
+
+    if [ ! -e "$DIRECT_GENERADOS/$ARCHIVO_COMPRIMIDO.zip" ]; then
+        echo -e "\nEl nombre del archivo comprimido es válido: $ARCHIVO_COMPRIMIDO.zip"
+        break
+    else
+        echo -e "\n --- \nError: El nombre del archivo comprimido ya existe en el directorio. Por favor, ingrese un nombre diferente.\n --- \n"
+    fi
+done
+
+echo -e "\nGenerando imágenes...\n"
 
 NOMBRES_TOTALES=$(curl -s https://raw.githubusercontent.com/adalessandro/EdP-2023-TP-Final/main/dict.csv | grep -oE "$REGEXP_NOMBRE")
 
 echo "$NOMBRES_TOTALES" > $NOMBRES_TXT
+
 
 # Generamos las imágenes según la cantidad ingresada por el usuario
 for ((i=0; i < CANTIDAD_IMAGENES; i++))
@@ -43,7 +51,7 @@ do
  	NOMBRE_ARCHIVO="${NOMBRE_ALEATORIO}.jpg"
 
 	# Descargar imagen desde el servicio web
-  	curl -o "$DIRECT_SALIDA/$NOMBRE_ARCHIVO" -L "https://source.unsplash.com/random/900%C3%97700/?person."  #el curl , por defecto descarga y guarda las img en "imagenes", con el -o podemos especificar>
+  	curl -o "$DIRECT_GENERADOS/$NOMBRE_ARCHIVO" -L "https://source.unsplash.com/random/900%C3%97700/?person."  #el curl , por defecto descarga y guarda las img en "imagenes", con el -o podemos especificar>
 
  	 # Esperar 2 segundos entre descargas
   	sleep 2
@@ -53,23 +61,22 @@ done
 rm $NOMBRES_TXT
 
 #comprimir las imagenes
-COMPRIMIR="${DIRECT_SALIDA}/${ARCHIVO_COMPRIMIDO}.zip"
-echo $COMPRIMIR
+COMPRIMIR="${DIRECT_GENERADOS}/${ARCHIVO_COMPRIMIDO}.zip"
 
-cd $DIRECT_SALIDA
-echo "Comprimiento..."
-sleep 1
-zip "${ARCHIVO_COMPRIMIDO}.zip" ./*.jpg
+echo -e "\nComprimiendo Imágenes... \n" && sleep 1
+cd $DIRECT_GENERADOS
+zip "${ARCHIVO_COMPRIMIDO}.zip" ./*.jpg > /dev/null 2>&1
 cd ..
 
-rm "$DIRECT_SALIDA"/*.jpg
+rm "$DIRECT_GENERADOS"/*.jpg
 
 # suma de verificación
 SUMA_VERIFICACION=$(md5sum $COMPRIMIR)
 
 # SUMA de verificacion en un archivo de texto
-echo "$SUMA_VERIFICACION" >> "${DIRECT_SALIDA}/${ARCHIVO_COMPRIMIDO}.txt"
+echo "$SUMA_VERIFICACION" >> "${DIRECT_GENERADOS}/${ARCHIVO_COMPRIMIDO}.txt"
 
 
-echo "Las imágenes fueron comprimidas con exito"
-echo $COMPRIMIR
+echo -e "\nLas imágenes fueron comprimidas con éxito."
+
+exit 0
