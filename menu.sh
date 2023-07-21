@@ -76,6 +76,7 @@ comprimir() {
 
 OPCIONES=("Generar Imagenes" "Descomprimir imagenes" "Procesar imagenes" "Comprimir" "Salir")
 
+<<<<<<< HEAD
 
 echo "Bienvenido al programa"
 sleep 1
@@ -93,10 +94,22 @@ do
 #	[ -e "$opcion" ] && echo "Proceso a ejecutar: $opcion" && continue
 	[ $REPLY == 5 ] && echo "Hasta luego :D" && break
 	echo "Proceso a ejecutar: $opcion" && sleep 2 && break
+=======
+OPCIONES=("SALIR" "DescargarImágenes" "ComprimirImágenes") 
+
+PS3='Ingrese un numero> '
+echo "Que desea hacer?"
+select opcion in "SALIR" "Descargar Imágenes" "Comprimir Imágenes"
+do
+	[ -e "$opcion" ] && echo "Opcion elegida: $opcion" && continue 
+	[ $REPLY == 1 ] && echo "Hasta luego" && break 
+	echo "Opcion elegida: $opcion" && break
+>>>>>>> Alsop/procesar.sh
 done
 
 case $REPLY in
 	1)
+<<<<<<< HEAD
                 generar
                 exit 0
                 ;;
@@ -115,6 +128,19 @@ case $REPLY in
 	5)
                 exit 0
                 ;;
+=======
+		exit 0
+        	;;
+   	2)
+		descargar
+		exit 0
+	 	;;
+	3)
+		generar
+		exit 0
+		;;
+
+>>>>>>> Alsop/procesar.sh
 esac
 
 
