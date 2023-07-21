@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#RUtas, directorios o archivos
-RUTA_UBICACION=$(pwd) 
+#Rutas, directorios o archivos
+RUTA_UBICACION=$(pwd)
 DIRECT_PROCESADOS="$RUTA_UBICACION/procesados"
 DIRECT_COMPRIMIDOS="$RUTA_UBICACION/comprimidos"
 DIRECT_OUTPUT="$RUTA_UBICACION/output"
@@ -10,9 +10,13 @@ VALIDOS_TXT="$DIRECT_COMPRIMIDOS/lista_nombres_validos.txt"
 VALIDOS_A_TXT="$DIRECT_COMPRIMIDOS/lista_nombres_a.txt"
 
 #Expresiones Regulares
-REGEXP_VALIDOS="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*" 
-#REGEXP_VALIDOS="^[A-Za-z]+( [A-Za-z]+)*$"
-REGEXP_VALIDOS_A="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*[a]{1}"
+REGEXP_NOMBRE="(^[A-Z][a-z]+)"
+#REGEXP_VALIDOS="$REGEXP_NOMBRE( |\$)$REGEXP_NOMBRE( |\$)$REGEXP_NOMBRE( |\$)"
+
+REGEXP_VALIDOS="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*"
+REGEXP_VALIDOS_A="$REGEXP_NOMBRE[a]{1}($|[ ])"
+#REGEXP_VALIDOS_A="^[A-Z][a-z]+[a]{1}($|[ ])"
+
 
 #Validacion de archivos utilizados
 [ -e $AUX_TXT ] && rm $AUX_TXT
@@ -22,19 +26,27 @@ REGEXP_VALIDOS_A="^[A-Z][a-z]+[ ]?[A-Z]?[a-z]*[ ]?[A-Z]?[a-z]*[a]{1}"
 mkdir $DIRECT_COMPRIMIDOS
 
 #Validamos que la ruta sea un directorio
-if [ -d "$DIRECT_PROCESADOS" ] 
-then	
+if [ -d "$DIRECT_PROCESADOS" ]
+then
 	# Buscamos las imágenes dentro de la carpeta y luego volvemos a la raíz del programa
-	echo -e "Buscando imágenes... \n"
-	sleep 2
-	cp -r "$DIRECT_PROCESADOS"/*.jpeg "$DIRECT_COMPRIMIDOS"
+	echo "Buscando imágenes..."
+	echo "Cargando: ---------- 0%"
+        sleep 1
+        echo "Cargando: ***------- 30%"
+	sleep 1
+	echo "Cargando: ******---- 60%"
+        sleep 1
+        echo "Cargando: *********- 90%"
+	sleep 1
+	echo -e  "¡Completado!"
+	sleep 1
+	cp -r "$DIRECT_PROCESADOS"/*.jpg "$DIRECT_COMPRIMIDOS"
 	if [ "$(ls -A "$DIRECT_COMPRIMIDOS")" ]
 	then
-		find $DIRECT_COMPRIMIDOS -name "*.jpeg" >> "$AUX_TXT"
+		find $DIRECT_COMPRIMIDOS -name "*.jpg" >> "$AUX_TXT"
 		CONTADOR_A=0
 	  	while IFS= read -r LINEA; do
-    			# asfasfa
-			NOMBRE_FOTO=$(echo "$LINEA" | grep -oP '[^/]+(?=\.jpeg)')
+			NOMBRE_FOTO=$(echo "$LINEA" | grep -oP '[^/]+(?=\.jpg)')
 			if [[ "$NOMBRE_FOTO" =~ $REGEXP_VALIDOS ]]
                        	then
 				echo "$NOMBRE_FOTO" >> $VALIDOS_TXT
@@ -68,7 +80,7 @@ fi
 #mkdir descomprimidos
 
 #echo "$NOMBRES_COMPLETOS"
-#echo "$NOMBRES_COMPLETOS" > descomprimidos/nombres-imagenes.txt 
+#echo "$NOMBRES_COMPLETOS" > descomprimidos/nombres-imagenes.txt
 
 
 exit 0
