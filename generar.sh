@@ -10,14 +10,15 @@ REGEXP_NOMBRE="^[A-Za-z ]+"
 REGEXP_NUMERO="^[1-9][0-9]*$"
 
 # Validamos si el valor ingresado por el usuario es un número entero positivo
-while [[ ! "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]]
+while [[ ! "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]] || (( CANTIDAD_IMAGENES > 50 ))
 do
     echo "Ingrese la cantidad de imágenes que desea descargar: "
     read -r CANTIDAD_IMAGENES
 
     # Validamos si el valor ingresado por el usuario es un número entero positivo
-    if [[ ! "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]]; then
-        echo -e "\n --- \nError: Debe ingresar un número entero positivo.\n --- \n"
+    if [[ ! "$CANTIDAD_IMAGENES" =~ $REGEXP_NUMERO ]] || (( CANTIDAD_IMAGENES > 50 ))
+    then
+        echo -e "\n --- \nError: El numero debe estar entre 1 y 51.\n --- \n"
     fi
 done
 
