@@ -1,122 +1,70 @@
 #!/bin/bash
 
+RUTA_UBICACION=$(pwd)
+
+# Importamos las funciones bienvenida y cargando
+source "$RUTA_UBICACION/utils.sh"
+
 # Opciones del menu:
-# Opcion 1: Generar
+# 1: Generar
 generar() {
-    echo "Has elegido Generar las imagenes"
-    sleep 1
-    echo "Cargando: ---------- 0%"
-    sleep 1
-    echo "Cargando: ***------- 30%"
-    sleep 1
-    echo "Cargando: ******---- 60%"
-    sleep 1
-    echo "Cargando: *********- 90%"
-    sleep 1
-    echo "¡Completado!"
-    echo " "
-    echo " "
-    echo " "
-    sleep 1
     ./generar.sh
     ./menu.sh
 }
 # Opcion 2: Descomprimir
 descomprimir() {
-    echo "Has elegido Descomprimir las imagenes"
-    sleep 1
-    echo "Cargando: ---------- 0%"
-    sleep 1
-    echo "Cargando: ***------- 30%"
-    sleep 1
-    echo "Cargando: ******---- 60%"
-    sleep 1
-    echo "Cargando: *********- 90%"
-    sleep 1
-    echo "¡Completado!"
-    sleep 1
-
     ./descomprimir.sh
     ./menu.sh
 }
 # Opcion 3: Procesar
 procesar() {
-    echo "Has elegido procesar las imagenes"
-    sleep 1
-    echo "Cargando: ---------- 0%"
-    sleep 1
-    echo "Cargando: ***------- 30%"
-    sleep 1
-    echo "Cargando: ******---- 60%"
-    sleep 1
-    echo "Cargando: *********- 90%"
-    sleep 1
-    echo "¡Completado!"
-    sleep 1
     ./procesar.sh
     ./menu.sh
 }
 # Opcion 4: Comprimir
 comprimir() {
-    echo "Has elegido comprimir"
-    sleep 1
-    echo "Cargando: ---------- 0%"
-    sleep 1
-    echo "Cargando: ***------- 30%"
-    sleep 1
-    echo "Cargando: ******---- 60%"
-    sleep 1
-    echo "Cargando: *********- 90%"
-    sleep 1
-    echo "¡Completado!"
-    sleep 1
     ./comprimir.sh
     ./menu.sh
 }
 
-OPCIONES=("Generar Imagenes" "Descomprimir imagenes" "Procesar imagenes" "Comprimir" "Salir")
+# OPCIONES=("Generar Imagenes" "Descomprimir imagenes" "Procesar imagenes" "Comprimir" "Salir")
+if [ ! -e .iniciado ]
+then
+    bienvenida
+else
+    echo -e "\nDocumentación complementaria en README.md"
+fi
 
-
-echo " "
-echo " "
-echo " " "-----------------------------------------------------------------------------------------------------------"
-echo "Hola de nuevo!, seras redireccionado al menu"
-sleep 2
-echo "Recomendamos leer el archivo readme.md antes de comenzar a utilizar el siguiente programa"
-echo "---------------------------------------------------------------------------------------------------------"
-sleep 1
-echo "Seleccione una opcion del siguiente menu: "
-sleep 1
+echo -e "--------------------------------------------------------------------------------------------------------- \n" && sleep 1
+echo -e "Seleccione una opcion del siguiente menu:\n" && sleep 1
 PS3='Ingrese el numero del proceso: '
 select opcion in "Generar Imagenes" "Descomprimir imagenes" "Procesar imagenes" "Comprimir" "Salir"
 do
 #	[ -e "$opcion" ] && echo "Proceso a ejecutar: $opcion" && continue
-	[ $REPLY == 5 ] && echo "Hasta luego :D" && break
-	echo "Proceso a ejecutar: $opcion" && sleep 2 && break
+	[ $REPLY == 5 ] && rm -f .iniciado && echo -e "\n¡Gracias por utilizar nuestro programa!\n\nNos vemos pronto :D \n" && break
+	echo -e "\n$opcion\n" && sleep 1 && break
 done
 
 case $REPLY in
 	1)
-                generar
-                exit 0
-                ;;
+        generar
+        exit 0
+        ;;
    	2)
-		Descomprimir
+		descomprimir
 		exit 0
 	 	;;
 	3)
-		Procesar
+		procesar
 		exit 0
 		;;
 	4)
-                Comprimir
-                exit 0
-                ;;
+        comprimir
+        exit 0
+        ;;
 	5)
-                exit 0
-                ;;
+        exit 0
+        ;;
 esac
-
-
 
 exit 0

@@ -7,24 +7,28 @@
 
 # Creacion de las variables
 RUTA_UBICACION=$(pwd)
-CARPETA_ORIGEN="${RUTA_UBICACION}/descomprimidos"
-CARPETA_DESTINO="${RUTA_UBICACION}/procesados"
+DIRECT_DESCOMPRIMIDOS="${RUTA_UBICACION}/descomprimidos"
+DIRECT_PROCESADOS="${RUTA_UBICACION}/procesados"
 REGEXP="^[A-Z][a-z]+[ ]?[A-Z]?[a-z][ ]?[A-Z]?[a-z]"
-#REGEXP="^[A-Z][a-z]+[ ][A-Z][a-z]+"
+
+source "$RUTA_UBICACION/utils.sh"
+
+cargando
 
 # Validacion de existencia de imagenes en la carpeta
-
-cd $CARPETA_ORIGEN
+cd $DIRECT_DESCOMPRIMIDOS
 LISTA_ARCHIVOS=$(find . -name "*.jpg")
 cd ..
 [ -z "$LISTA_ARCHIVOS" ] && echo "No se encontraron fotos en el directorio" && exit 1
 
 # Proceso de modificacion de las imagenes
 
-for IMAGEN in "$CARPETA_ORIGEN"/*
+mkdir -p $DIRECT_PROCESADOS
+
+for IMAGEN in "$DIRECT_DESCOMPRIMIDOS"/*
 do
 	NOMBRE=$(basename "$IMAGEN")
-        [[ $NOMBRE =~ $REGEXP ]] && convert "$IMAGEN" -resize 512x512 "$CARPETA_DESTINO/$NOMBRE"
+        [[ $NOMBRE =~ $REGEXP ]] && convert "$IMAGEN" -resize 512x512 "$DIRECT_PROCESADOS/$NOMBRE" > /dev/null 2>&1
 done
 
 exit 0
