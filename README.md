@@ -30,7 +30,35 @@ válidos(nombre válido explicado en procesar.sh) y por último un archivo compr
 
 ## Paso a Paso
 ### 1) Ejecución del contenedor
-AYUDAA
+
+1- Descarga de archivos: Para comenzar, asegúrate de descargar todos los archivos necesarios desde el repositorio y colócalos en una misma carpeta en tu sistema.
+
+2- Acceso a la terminal: Abre una terminal shell en tu sistema operativo. Esto te permitirá ejecutar comandos y navegar entre las carpetas del sistema.
+
+4- Navegación a la carpeta: Utiliza el comando "cd" para navegar hasta la carpeta donde has almacenado los archivos descargados. Por ejemplo:
+	
+```
+cd Ruta_de_la_carpeta
+```
+Sustituye "Ruta_de_la_carpeta" por la ruta real de la carpeta en tu sistema.
+
+5- Verificación de permisos: Antes de ejecutar el archivo "init.sh", verifica si tiene los permisos necesarios para ser ejecutado. Puedes hacerlo con el siguiente comando:
+	
+```
+ls -l init.sh
+```
+6- Asegúrate de que el archivo tenga permisos de ejecución. Si no los tiene, puedes otorgárselos utilizando el siguiente comando:
+	
+```
+chmod +x init.sh
+```
+7- Ejecución del script: Ahora que tienes los permisos adecuados, puedes ejecutar el script "init.sh". Utiliza el siguiente comando para hacerlo:
+
+```
+./init.sh
+```
+Este script creará una imagen en Docker y llevará a cabo las configuraciones necesarias para poner en marcha el contenedor.
+
 
 ### 2) Generación de imágenes
 
