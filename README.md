@@ -11,23 +11,6 @@ Alsop, Agustin - Scavuzzo, Lautaro - Peralta, Alejandro
 Diseñar y escribir un programa para procesar un lote de imágenes. El programa cuenta con 5 Scrips que correran dentro de un contenedor, el resultado de este proceso 
 será un archivo comprimido y un archivo de texto.
 
-## Guia de usuario
-
-#### Definiciones
-En esta sección se brinda un breve resumen de cada archivo presente en el contenedor:
-
-##### menu.sh
-Permite visualizar el cada uno de los Script, mostrándose como opciones a ejecutar.
-##### generar.sh  
-Genera imágenes utilizando un servicio web. El usuario debe indicar cuantas imágenes generar. A estas imágenes se les asigna un nombre al azar proveniente de un archivo CSV (https://raw.githubusercontent.com/adalessandro/EdP-2023-TP-Final/main/dict.csv). Posteriormente se comprimen las imágenes en un archivo .zip y se genera una suma de verificación. En resumen, el resultado de este Scrip es un archivo .zip con las imágenes comprimidas y un archivo .txt con la suma de verificación, este resultado va a estar contenido en un directorio creado por el propio Script, llamado “imagenes_comprimidas”.
-##### descomprimir.sh: 
-El usuario debe indicar dos archivos como argumento. Uno es el archivo comprimido y el otro la suma de verificación, ambos generados por generar.sh y contenidos en “imagenes_comprimidas”. Realiza un proceso de validación, si no retorna un error se procede a descomprimir en el directorio “descomprimidos”.
-##### procesar.sh: 
-Toma un lote de imágenes que se encuentra en un directorio obtenido por descomprimir y hace un recorte a una resolución de 512*512. Sólo procesa las imágenes que tienen nombres válidos(entiéndase por nombres válidos a cualquier combinación de palabras que comienzan con una letra mayúscula y sigan con minúsculas). Estas imágenes ya procesadas se guardan en el directorio “procesados”.
-##### comprimir.sh: 
-Luego de haber procesado las imágenes, se genera un archivo .txt con el nombre de cada imagen como contenido. Luego un archivo .txt con los nombres
-válidos(nombre válido explicado en procesar.sh) y por último un archivo comprimido que contenga los archivos anteriores  y todas las imágenes contenidas en “descomprimidos”. El archivo comprimido se podrá acceder fuera del contenedor. 
-
 ## Paso a Paso
 ### 1) Ejecución del contenedor
 
@@ -113,4 +96,21 @@ Se iniciará el proceso de comprensión, que realizará automáticamente las sig
 5- Por último, se generará un archivo comprimido que incluirá los archivos generados en los items anteriores y todas las imágenes procesadas. Este archivo comprimido permitirá tener una copia completa y ordenada de los resultados obtenidos durante el proceso de generación, descompresión, procesamiento y comprensión de las imágenes. Es importante destacar que este archivo comprimido será accesible desde fuera del contenedor del programa, lo que facilitará su distribución y respaldo.
 
 El proceso de comprensión automática de los resultados simplificará la gestión y organización de la información generada durante la ejecución del programa. De esta manera, el usuario podrá acceder fácilmente a los archivos con la lista de nombres, los nombres válidos y el recuento de personas, así como al archivo comprimido que contiene todos los resultados y las imágenes procesadas. Este paso final asegurará una experiencia eficiente y completa al utilizar el programa "Generación de Imágenes".
+
+## Guia de usuario
+
+#### Definiciones
+En esta sección se brinda un breve resumen de cada archivo presente en el contenedor:
+
+##### menu.sh
+Permite visualizar el cada uno de los Script, mostrándose como opciones a ejecutar.
+##### generar.sh  
+Genera imágenes utilizando un servicio web. El usuario debe indicar cuantas imágenes generar. A estas imágenes se les asigna un nombre al azar proveniente de un archivo CSV (https://raw.githubusercontent.com/adalessandro/EdP-2023-TP-Final/main/dict.csv). Posteriormente se comprimen las imágenes en un archivo .zip y se genera una suma de verificación. En resumen, el resultado de este Scrip es un archivo .zip con las imágenes comprimidas y un archivo .txt con la suma de verificación, este resultado va a estar contenido en un directorio creado por el propio Script, llamado “imagenes_comprimidas”.
+##### descomprimir.sh: 
+El usuario debe indicar dos archivos como argumento. Uno es el archivo comprimido y el otro la suma de verificación, ambos generados por generar.sh y contenidos en “imagenes_comprimidas”. Realiza un proceso de validación, si no retorna un error se procede a descomprimir en el directorio “descomprimidos”.
+##### procesar.sh: 
+Toma un lote de imágenes que se encuentra en un directorio obtenido por descomprimir y hace un recorte a una resolución de 512*512. Sólo procesa las imágenes que tienen nombres válidos(entiéndase por nombres válidos a cualquier combinación de palabras que comienzan con una letra mayúscula y sigan con minúsculas). Estas imágenes ya procesadas se guardan en el directorio “procesados”.
+##### comprimir.sh: 
+Luego de haber procesado las imágenes, se genera un archivo .txt con el nombre de cada imagen como contenido. Luego un archivo .txt con los nombres
+válidos(nombre válido explicado en procesar.sh) y por último un archivo comprimido que contenga los archivos anteriores  y todas las imágenes contenidas en “descomprimidos”. El archivo comprimido se podrá acceder fuera del contenedor. 
 
