@@ -4,7 +4,7 @@
 RUTA_UBICACION=$(pwd)
 DIRECT_PROCESADOS="$RUTA_UBICACION/procesados"
 DIRECT_COMPRIMIDOS="$RUTA_UBICACION/comprimidos"
-DIRECT_OUTPUT="$RUTA_UBICACION/output"
+DIRECT_OUTPUT="/home/output"
 AUX_TXT="aux.txt"
 VALIDOS_TXT="$DIRECT_COMPRIMIDOS/lista_nombres_validos.txt"
 VALIDOS_A_TXT="$DIRECT_COMPRIMIDOS/lista_nombres_a.txt"
@@ -22,7 +22,6 @@ source "$RUTA_UBICACION/utils.sh"
 #Validacion de archivos utilizados
 [ -e $AUX_TXT ] && rm $AUX_TXT
 [ -e $DIRECT_COMPRIMIDOS ] && rm -r $DIRECT_COMPRIMIDOS
-[ -e $DIRECT_OUTPUT ] && rm -r $DIRECT_OUTPUT
 
 mkdir $DIRECT_COMPRIMIDOS
 #Validamos que la ruta sea un directorio
@@ -51,17 +50,19 @@ then
 		echo -e "Imágenes procesadas correctamente. \n" && sleep 1
 		sleep 1
 		echo -e "Cantidad de nombres que terminan en a: $CONTADOR_A \n" && sleep 1
-		echo -e "Cantidad de nombres que terminan en a: $CONTADOR_A \n" | cat - $VALIDOS_A_TXT > $AUX_TXT
+		echo -e "Cantidad de nombres que terminan en a: $CONTADOR_A \n" | cat - $VALIDOS_A_TXT > $AUX_TXT > /dev/null 2>&1
 		mv $AUX_TXT $VALIDOS_A_TXT
 	else
-		echo "No se existen imágenes procesadas. Ejecute pasos 1, 2 y 3 antes de Comprimir." && exit 1
+		echo "No existen imágenes procesadas. Ejecute pasos 1, 2 y 3 antes de Comprimir." && exit 1
 	fi
 	# Si el proceso se lleva a cabo correctamente, comprimimos los archivos y directorios
 	echo -e "Compresión en curso... \n" && sleep 1
-	mkdir $DIRECT_OUTPUT
 	cd $DIRECT_COMPRIMIDOS
-	zip -r $DIRECT_OUTPUT ./ > /dev/null 2>&1
+	zip -r "$DIRECT_OUTPUT/resultado.zip" ./ > /dev/null 2>&1
+	cd ..
 	echo "Proceso terminado, resultado disponible en carpeta output"
-fi
+else
+	echo "Ejecute pasos 1, 2 y 3 antes de Comprimir." && exit 1
+fi	
 
 exit 0
