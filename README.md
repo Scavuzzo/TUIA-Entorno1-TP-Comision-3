@@ -42,7 +42,7 @@ chmod +x init.sh
 ```
 Este script creará una imagen en Docker y llevará a cabo las configuraciones necesarias para poner en marcha el contenedor.
 
-## Aclaracion 
+### Aclaracion 
 La primera vez iniciada tendras que que poner el siguiente codigo con tu usuario y luego reiniciar el equipo
 ```
 sudo usermod -aG docker $USER
