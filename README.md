@@ -1,8 +1,8 @@
-# TRABAJO PRÁCTICO - ENTORNO DE PROGRAMACIÓN 
+# TRABAJO PRÁCTICO - ENTORNO DE PROGRAMACIÓN
 
 Trabajo final realizado para la materia Entorno De Programación. En este repositorio se encuentran todos los archivos necesarios para la realización de dicho trabajo.
 
-## A continuación, sus integrantes:
+## GRUPO 24:
 
 Alsop, Agustin - Scavuzzo, Lautaro - Peralta, Alejandro
 
