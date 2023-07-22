@@ -19,13 +19,13 @@ do
 done
 RUTA_COMPRIMIDO="${DIRECT_GENERADOS}/${ARCHIVO_COMPRIMIDO}.zip"
 
-echo "Ingrese la suma de verificacion: "
+echo "Ingrese el archivo de la suma de verificacion (tiene el mismo nombre que el comprimido): "
 read -r SUMA_VERIFICACION
 
 while [ ! -e "$DIRECT_GENERADOS/$SUMA_VERIFICACION.txt" ]
 do
     echo -e "\n --- \nError: El archivo no se ha encontrado.\n --- \n"
-    echo "Ingrese la suma de verificacion: "
+    echo "Ingrese el archivo de la suma de verificacion (tiene el mismo nombre que el comprimido): "
     read -r SUMA_VERIFICACION
 done
 
